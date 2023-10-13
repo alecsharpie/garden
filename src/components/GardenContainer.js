@@ -25,15 +25,14 @@ const generatePlant = (species) => {
 
 const GardenContainer = () => {
   // const [plants, setPlants] = useState([]);
-console.log(generatePlant("A"));
   const [plants, setPlants] = useState([
     generatePlant("A"),
     // generatePlant("B")
   ]);
 
-  useEffect(() => {
-    console.log('plants', plants);
-  }, [plants]);
+  // useEffect(() => {
+  //   console.log('plants', plants);
+  // }, [plants]);
 
   // Simulation loop
 const plantsRef = useRef(plants);
@@ -50,26 +49,25 @@ useEffect(() => {
     console.log("animate");
     let newPlants = []; // Array to hold new plants
 
-    console.log("plantsRef.current", plantsRef.current);
-
-    console.log("plant.lifeSpan", plantsRef.current.lifeSpan);
-
     // First filter out the plants that should die
     const livingPlants = plantsRef.current.filter(
       (plant) =>
-        plant.lifeSpan &&
-        plant.lifeSpan.dead &&
+        !plant.lifeSpan ||
+        !plant.lifeSpan.dead ||
         plant.growthStatus < plant.lifeSpan.dead.age + 20
     );
 
     console.log("livingplants", livingPlants);
 
+    // Calculate the number of new plants that can be added
+    let availableSlots = 100 - plantsRef.current.length;
+
     // Then map over the remaining plants to update their properties
     const updatedPlants = livingPlants.map((plant) => {
       let updatedPlant = { ...plant }; // Create a new object to avoid mutation
       updatedPlant.growthStatus += 1;
-      const lifeSpan = speciesData[updatedPlant.species].lifeSpan;
-      console.log(updatedPlant.growthStatus);
+      // console.log("updatedPlant.lifeSpan", updatedPlant.lifeSpan);
+      const lifeSpan = updatedPlant.lifeSpan;
       if (updatedPlant.growthStatus <= lifeSpan.seedling.age) {
         updatedPlant.lifeCycle = "seed";
         updatedPlant.img = lifeSpan.seed.img;
@@ -79,25 +77,27 @@ useEffect(() => {
       } else if (updatedPlant.growthStatus < lifeSpan.dead.age) {
         updatedPlant.lifeCycle = "mature";
         updatedPlant.img = lifeSpan.mature.img;
-        for (let i = 0; i < updatedPlant.numSeeds; i++) {
+        for (let i = 0; i < updatedPlant.numSeeds && availableSlots > 0; i++) {
           if (Math.random() < updatedPlant.dropChance) {
-            if (plantsRef.current.length < 10) {
+            if (plantsRef.current.length < 100) {
               const newPlant = {
                 id: Math.random(),
+                species: updatedPlant.species,
                 x: updatedPlant.x + (Math.random() - 0.5) * 100,
                 y: updatedPlant.y + (Math.random() - 0.5) * 100,
-                growthStatus: 10,
-                growthRate: 0.1,
+                growthStatus: 1,
                 lifeCycle: "seed",
-                numSeeds: 4,
-                dropChance: 0.5,
+                growthRate: updatedPlant.growthRate,
+                numSeeds: updatedPlant.numSeeds,
+                dropChance: updatedPlant.dropChance,
+                lifeSpan: updatedPlant.lifeSpan,
               };
               newPlants.push(newPlant);
+              availableSlots--;
             }
           }
         }
       } else {
-        console.log("dead");
         updatedPlant.lifeCycle = "dead";
         updatedPlant.img = lifeSpan.dead.img;
       }
