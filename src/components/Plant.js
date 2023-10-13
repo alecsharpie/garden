@@ -7,7 +7,28 @@ import useImage from "use-image";
 //   return <Circle x={x} y={y} radius={growthStatus} fill="green" />;
 // };
 
-export const Plant = ({ x, y, img, growthStatus }) => {
+export const Plant = ({ x, y, img, growthStatus, lifeCycle }) => {
   const [image] = useImage(img);
-  return <Image x={(x - (growthStatus/2))} y={y} image={image} width={growthStatus} height={-growthStatus} />;
+
+  if (lifeCycle === "dead") {
+    return (
+      <Image
+        x={x - (32 / 2)}
+        y={y}
+        image={image}
+        width={32}
+        height={-32}
+      />
+    );
+  } else {
+    return (
+      <Image
+        x={x - growthStatus / 2}
+        y={y}
+        image={image}
+        width={growthStatus}
+        height={-growthStatus}
+      />
+    );
+  }
 };

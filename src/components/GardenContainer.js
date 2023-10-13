@@ -15,10 +15,10 @@ const generatePlant = (species) => {
     x: Math.random() * 600,
     y: Math.random() * 600,
     growthStatus: 1,
-    growthRate: data.baseGrowthRate,
+    growthRate: data.baseGrowthRate + (Math.random() * data.baseGrowthRate),
     lifeCycle: "seed",
     numSeeds: data.numSeeds,
-    dropChance: data.dropChance,
+    dispersion: data.dispersion,
     lifeSpan: data.lifeSpan,
   };
 };
@@ -51,6 +51,13 @@ const animate = useCallback(() => {
 
   console.log("livingplants", livingPlants);
 
+  // If all plants are dead, add a new one
+  // if all plants are off screen, add a new one
+  if (livingPlants.length === 0 || livingPlants.every((plant) => plant.x < 0 || plant.x > 600 || plant.y < 0 || plant.y > 600)) {
+    console.log("adding new plant");
+    setPlants([...livingPlants, generatePlant("A")]);
+  }
+
   // Calculate the number of new plants that can be added
   let availableSlots = 100 - plantsRef.current.length;
 
@@ -70,24 +77,24 @@ const animate = useCallback(() => {
       updatedPlant.lifeCycle = "mature";
       updatedPlant.img = lifeSpan.mature.img;
       for (let i = 0; i < updatedPlant.numSeeds && availableSlots > 0; i++) {
-        if (Math.random() < updatedPlant.dropChance) {
-          if (plantsRef.current.length < 100) {
             const newPlant = {
               id: Math.random(),
               species: updatedPlant.species,
-              x: updatedPlant.x + (Math.random() - 0.5) * 100,
-              y: updatedPlant.y + (Math.random() - 0.5) * 100,
+              x:
+                updatedPlant.x +
+                (Math.random() - 0.5) * 300,//* updatedPlant.dispersion * 100,
+              y:
+                updatedPlant.y +
+                (Math.random() - 0.5) * 300,//* updatedPlant.dispersion * 100,
               growthStatus: 1,
               lifeCycle: "seed",
               growthRate: updatedPlant.growthRate,
               numSeeds: updatedPlant.numSeeds,
-              dropChance: updatedPlant.dropChance,
               lifeSpan: updatedPlant.lifeSpan,
+              dispersion: updatedPlant.dispersion,
             };
             newPlants.push(newPlant);
             availableSlots--;
-          }
-        }
       }
     } else {
       updatedPlant.lifeCycle = "dead";
@@ -113,7 +120,7 @@ const animate = useCallback(() => {
   useEffect(() => {
     let intervalId;
     if (isPlaying) {
-      intervalId = setInterval(animate, 1000 / 60); // 60 FPS
+      intervalId = setInterval(animate, 1000 / 30); // 60 FPS
     }
     return () => {
       if (intervalId) {
@@ -124,22 +131,25 @@ const animate = useCallback(() => {
 
   return (
     <div>
-    <button onClick={() => setIsPlaying(!isPlaying)}>
-      {isPlaying ? 'Pause' : 'Play'}
-    </button>
-    <Stage width={window.innerWidth} height={window.innerHeight}>
-      <Layer>
-        {plants.map((plant) => (
-          <Plant
-            key={plant.id}
-            x={plant.x}
-            y={plant.y}
-            img={plant.img}
-            growthStatus={plant.growthStatus}
-          />
-        ))}
-      </Layer>
-    </Stage>
+      <button onClick={() => setIsPlaying(!isPlaying)}>
+        {isPlaying ? "Pause" : "Play"}
+      </button>
+      <Stage width={window.innerWidth} height={window.innerHeight}>
+        <Layer>
+          {plants
+            .sort((a, b) => a.y - b.y)
+            .map((plant) => (
+              <Plant
+                key={plant.id}
+                x={plant.x}
+                y={plant.y}
+                img={plant.img}
+                growthStatus={plant.growthStatus}
+                lifeCycle={plant.lifeCycle}
+              />
+            ))}
+        </Layer>
+      </Stage>
     </div>
   );
 };

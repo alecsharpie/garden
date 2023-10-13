@@ -5,14 +5,14 @@ import deadImage from "../images/dead.png";
 
 export const speciesData = {
   A: {
-    baseGrowthRate: 0.5,
-    numSeeds: 5,
-    dropChance: 0.5,
+    baseGrowthRate: 0.00001,
+    numSeeds: 1,
+    dispersion: 5,
     lifeSpan: {
       seed: { age: 1, img: seedImage },
-      seedling: { age: 10, img: seedlingImage },
-      mature: { age: 50, img: matureImage },
-      dead: { age: 100, img: deadImage },
+      seedling: { age: 15, img: seedlingImage },
+      mature: { age: 30, img: matureImage },
+      dead: { age: 80, img: deadImage },
     },
   },
   // Add more species as needed
