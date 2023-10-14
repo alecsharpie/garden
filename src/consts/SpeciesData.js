@@ -5,8 +5,9 @@ import deadImage from "../images/dead.png";
 
 export const speciesData = {
   A: {
-    baseGrowthRate: 0.00001,
+    baseGrowthRate: 0.1,
     numSeeds: 1,
+    sproutChance: 0.1,
     dispersion: 5,
     lifeSpan: {
       seed: { age: 1, img: seedImage },
