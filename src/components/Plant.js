@@ -3,7 +3,7 @@ import { Sprite } from "react-konva";
 import spriteImage from "../images/tree_sprite_3x3_grid_clean_clear.png";
 
 export const Plant = ({ x, y, growthStatus, lifeSpan }) => {
-  const [imgOptions, setImgOptions] = useState({
+  const [spriteSheet, setSpriteSheet] = useState({
     image: null,
   });
 
@@ -12,48 +12,39 @@ export const Plant = ({ x, y, growthStatus, lifeSpan }) => {
   useEffect(() => {
     const sprite = spriteRef.current;
     if (sprite) {
-      const stage = Math.floor((growthStatus / lifeSpan) * 9);
+      const stage = Math.min(Math.floor((growthStatus / lifeSpan) * 9), 8);
       sprite.animation(stage);
     }
-  }, [growthStatus, lifeSpan]);
-
-  useEffect(() => {
-    const sprite = spriteRef.current;
 
     const image = new window.Image();
     image.src = spriteImage;
     image.onload = () => {
-      setImgOptions({
+      setSpriteSheet({
         image: image,
       });
     };
-
-    if (sprite) {
-      const stage = Math.min(Math.floor((growthStatus / lifeSpan) * 9), 8);
-      sprite.animation(stage);
-    }
   }, [growthStatus, lifeSpan]);
 
   return (
-      <Sprite
-        ref={spriteRef}
-        x={x}
-        y={y}
-        image={imgOptions.image}
-        animation={8}
-        animations={{
-          0: [0, 0, 256, 256],
-          1: [256, 0, 256, 256],
-          2: [512, 0, 256, 256],
-          3: [0, 256, 256, 256],
-          4: [256, 256, 256, 256],
-          5: [512, 256, 256, 256],
-          6: [0, 512, 256, 256],
-          7: [256, 512, 256, 256],
-          8: [512, 512, 256, 256],
-        }}
-        frameRate={10}
-        frameIndex={0}
-      />
+    <Sprite
+      ref={spriteRef}
+      x={x}
+      y={y}
+      image={spriteSheet.image}
+      animation={0}
+      animations={{
+        0: [0, 0, 256, 256],
+        1: [256, 0, 256, 256],
+        2: [512, 0, 256, 256],
+        3: [0, 256, 256, 256],
+        4: [256, 256, 256, 256],
+        5: [512, 256, 256, 256],
+        6: [0, 512, 256, 256],
+        7: [256, 512, 256, 256],
+        8: [512, 512, 256, 256],
+      }}
+      frameRate={10}
+      frameIndex={0}
+    />
   );
 };

@@ -26,7 +26,8 @@ const generatePlant = (species) => {
     growthStatus: 1,
     growthRate: data.baseGrowthRate + Math.random() * data.baseGrowthRate * 2,
     lifeCycle: "seed",
-    numSeeds: data.numSeeds,
+    seedsNum: data.seedsNum,
+    seedsAge: data.seedsAge,
     sproutChance: data.sproutChance,
     dispersion: data.dispersion,
     lifeSpan: data.lifeSpan,
@@ -53,12 +54,15 @@ const GardenContainer = () => {
     let newPlants = []; // Array to hold new plants
 
     // First filter out the plants that should die
-    const livingPlants = plantsRef.current.filter(
-      (plant) =>
-        !plant.lifeSpan ||
-        !plant.lifeSpan.dead ||
-        plant.growthStatus < plant.lifeSpan.dead.age + 20
-    );
+    const livingPlants = plantsRef.current.filter((plant) => {
+      if (plant.growthStatus < plant.lifeSpan) {
+        return true;
+      } else {
+        // Here we add a random chance for the plant to survive even if its growthStatus is greater than its lifeSpan.
+        // This will give a 50% chance for the plant to survive. Adjust the value to fit your needs.
+        return Math.random() > 0.5;
+      }
+    });
 
     console.log("livingplants", livingPlants);
 
@@ -93,27 +97,15 @@ const GardenContainer = () => {
         );
         if (distance < 10) {
           let delta = nearest.growthStatus - plant.growthStatus;
-          if (delta > 0){
-          updatedPlant.growthRate =
-            updatedPlant.growthRate * Math.min((1 / delta, 0.5)); // Slow down growth if the nearest plant is bigger
+          if (delta > 0) {
+            updatedPlant.growthRate =
+              updatedPlant.growthRate * Math.min((1 / delta, 0.5)); // Slow down growth if the nearest plant is bigger
+          }
         }
       }
-      }
-
       updatedPlant.growthStatus += updatedPlant.growthRate;
-      // console.log("updatedPlant.lifeSpan", updatedPlant.lifeSpan);
-      // const lifeSpan = updatedPlant.lifeSpan;
-      // if (updatedPlant.growthStatus <= lifeSpan.seedling.age) {
-      //   updatedPlant.lifeCycle = "seed";
-      //   updatedPlant.img = lifeSpan.seed.img;
-      // } else if (updatedPlant.growthStatus < lifeSpan.mature.age) {
-      //   updatedPlant.lifeCycle = "seedling";
-      //   updatedPlant.img = lifeSpan.seedling.img;
-      // } else if (updatedPlant.growthStatus < lifeSpan.dead.age) {
-      //   updatedPlant.lifeCycle = "mature";
-      //   updatedPlant.img = lifeSpan.mature.img;
-      if (updatedPlant.growthStatus > 50) {
-        for (let i = 0; i < updatedPlant.numSeeds && availableSlots > 0; i++) {
+      if (updatedPlant.growthStatus > updatedPlant.seedsAge) {
+        for (let i = 0; i < updatedPlant.seedsNum && availableSlots > 0; i++) {
           if (Math.random() < updatedPlant.sproutChance) {
             const newPlant = {
               id: Math.random(),
@@ -127,7 +119,7 @@ const GardenContainer = () => {
               growthStatus: 1,
               lifeCycle: "seed",
               growthRate: updatedPlant.growthRate + gaussianRand() * 0.1,
-              numSeeds: updatedPlant.numSeeds,
+              seedsNum: updatedPlant.seedsNum,
               sproutChance: updatedPlant.sproutChance,
               lifeSpan: updatedPlant.lifeSpan,
               dispersion: updatedPlant.dispersion + gaussianRand() * 0.1,
@@ -136,12 +128,13 @@ const GardenContainer = () => {
             availableSlots--;
           }
         }
-      } else if (updatedPlant.growthStatus > updatedPlant.lifeSpan) {
-        //death: random chance to not return updatedPlant
-        if (Math.random() > 0.5) {
-          return;
-        }
       }
+      // if (updatedPlant.growthStatus > updatedPlant.lifeSpan) {
+      //   //death: random chance to not return updatedPlant
+      //   if (Math.random() > 0.5) {
+      //     return;
+      //   }
+      // }
       return updatedPlant;
     });
 
