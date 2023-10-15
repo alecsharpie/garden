@@ -6,11 +6,9 @@ import { quadtree } from "d3-quadtree";
 
 function gaussianRand() {
   var rand = 0;
-
   for (var i = 0; i < 6; i += 1) {
     rand += Math.random();
   }
-
   return rand / 6;
 }
 
@@ -104,16 +102,17 @@ const GardenContainer = () => {
 
       updatedPlant.growthStatus += updatedPlant.growthRate;
       // console.log("updatedPlant.lifeSpan", updatedPlant.lifeSpan);
-      const lifeSpan = updatedPlant.lifeSpan;
-      if (updatedPlant.growthStatus <= lifeSpan.seedling.age) {
-        updatedPlant.lifeCycle = "seed";
-        updatedPlant.img = lifeSpan.seed.img;
-      } else if (updatedPlant.growthStatus < lifeSpan.mature.age) {
-        updatedPlant.lifeCycle = "seedling";
-        updatedPlant.img = lifeSpan.seedling.img;
-      } else if (updatedPlant.growthStatus < lifeSpan.dead.age) {
-        updatedPlant.lifeCycle = "mature";
-        updatedPlant.img = lifeSpan.mature.img;
+      // const lifeSpan = updatedPlant.lifeSpan;
+      // if (updatedPlant.growthStatus <= lifeSpan.seedling.age) {
+      //   updatedPlant.lifeCycle = "seed";
+      //   updatedPlant.img = lifeSpan.seed.img;
+      // } else if (updatedPlant.growthStatus < lifeSpan.mature.age) {
+      //   updatedPlant.lifeCycle = "seedling";
+      //   updatedPlant.img = lifeSpan.seedling.img;
+      // } else if (updatedPlant.growthStatus < lifeSpan.dead.age) {
+      //   updatedPlant.lifeCycle = "mature";
+      //   updatedPlant.img = lifeSpan.mature.img;
+      if (updatedPlant.growthStatus > 50) {
         for (let i = 0; i < updatedPlant.numSeeds && availableSlots > 0; i++) {
           if (Math.random() < updatedPlant.sproutChance) {
             const newPlant = {
@@ -137,9 +136,11 @@ const GardenContainer = () => {
             availableSlots--;
           }
         }
-      } else {
-        updatedPlant.lifeCycle = "dead";
-        updatedPlant.img = lifeSpan.dead.img;
+      } else if (updatedPlant.growthStatus > updatedPlant.lifeSpan) {
+        //death: random chance to not return updatedPlant
+        if (Math.random() > 0.5) {
+          return;
+        }
       }
       return updatedPlant;
     });
@@ -184,9 +185,9 @@ const GardenContainer = () => {
                 key={plant.id}
                 x={plant.x}
                 y={plant.y}
-                img={plant.img}
+                // img={plant.img}
                 growthStatus={plant.growthStatus}
-                lifeCycle={plant.lifeCycle}
+                lifeSpan={plant.lifeSpan}
               />
             ))}
         </Layer>
