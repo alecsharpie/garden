@@ -1,9 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Sprite } from "react-konva";
-import Konva from "konva";
 import spriteImage from "../images/tree_sprite_3x3_grid_clean_clear.png";
-
-import useImage from "use-image";
 
 export const Plant = ({ x, y, growthStatus, lifeSpan }) => {
   const [imgOptions, setImgOptions] = useState({
@@ -11,7 +8,6 @@ export const Plant = ({ x, y, growthStatus, lifeSpan }) => {
   });
 
   const spriteRef = useRef();
-  // const [image] = useImage(spriteImage);
 
   useEffect(() => {
     const sprite = spriteRef.current;
@@ -26,30 +22,18 @@ export const Plant = ({ x, y, growthStatus, lifeSpan }) => {
 
     const image = new window.Image();
     image.src = spriteImage;
-    // image.src = "../images/tree_sprite_3x3_grid_clean_clear.png";
-    // image.src = "https://konvajs.github.io/assets/blob-sprite.png";
     image.onload = () => {
-      // set image only when it is loaded
       setImgOptions({
         image: image,
       });
-      // spriteRef.current.start();
     };
 
-
     if (sprite) {
-      console.log("growthStatus", growthStatus);
-      console.log("lifeSpan", lifeSpan);
       const stage = Math.min(Math.floor((growthStatus / lifeSpan) * 9), 8);
-      console.log("stage", stage);
-      console.log("stage string", stage.toString());
-      console.log("sprite", sprite);
-      // console.log("spriteImage", imgOptions.image);
       sprite.animation(stage);
     }
   }, [growthStatus, lifeSpan]);
 
-  // console.log("img", spriteImage);
   return (
       <Sprite
         ref={spriteRef}
