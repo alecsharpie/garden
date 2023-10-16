@@ -90,23 +90,67 @@ const GardenContainer = () => {
     const updatedPlants = livingPlants.map((plant) => {
       let updatedPlant = { ...plant }; // Create a new object to avoid mutation
 
-      const nearest = tree.find(plant.x, plant.y, 50); // Find the nearest plant within a radius of 50
+      // CALCULATE "DENSITY" OF NEARBY PLANTS
+      // REDUCE SPROUT CHANCE BASED ON DENSITY
+
+      // let nearestPlants = [];
+      // let tempTree = tree.copy(); // Create a copy of the tree to remove points from
+
+      // // Find the nearest 3 plants
+      // for (let i = 0; i < 3; i++) {
+      //   const nearest = tempTree.find(plant.x, plant.y, 50); // Find the nearest plant within a radius of 50
+      //   if (nearest) {
+
+      //     const distance = (plant.x - nearest.x) ** 2 + (plant.y - nearest.y) ** 2;
+
+      //     // reduce sprout chance based on distance
+      //     // 0 distance should reduce sprout chance by 100%
+      //     // 50 distance should reduce sprout chance by 50%
+      //     // 100 distance should reduce sprout chance by 0%
+
+
+      //     nearestPlants.push(nearest);
+      //     tempTree.remove(nearest); // Remove the found plant from the tree
+      //   }
+      // }
+
+      // if (nearestPlants.length > 0) {
+      //   const avgDistance = nearestPlants.reduce((sum, p) => sum + (plant.x - nearest.x) ** 2 + (plant.y - nearest.y) ** 2, 0) / nearestPlants.length;
+      //   updatedPlant.sproutChance *= Math.max(0, 1 - avgGrowthStatus / 50); // Decrease growth rate based on average growthStatus
+      // }
+
+      // nearest has same x & y as plant??
+
+      let sproutChance = updatedPlant.sproutChance;
+
+      // const nearest = tree.find(plant.x, plant.y, 50); // Find the nearest plant within a radius of 50
+
+      tree.remove(plant); // Remove the current plant from the tree
+      const nearest = tree.find(plant.x, plant.y, 100); // Find the nearest plant within a radius of 50
+      tree.add(plant);
       if (nearest) {
+        console.log("plant x", plant.x)
+        console.log("plant y", plant.y)
+        console.log("nearest x", nearest.x)
+        console.log("nearest y", nearest.y);
         const distance = Math.sqrt(
           (plant.x - nearest.x) ** 2 + (plant.y - nearest.y) ** 2
         );
-        if (distance < 10) {
-          let delta = nearest.growthStatus - plant.growthStatus;
-          if (delta > 0) {
-            updatedPlant.growthRate =
-              updatedPlant.growthRate * Math.min((1 / delta, 0.5)); // Slow down growth if the nearest plant is bigger
-          }
+        // if (distance < 10) {
+        //   console.log("too close to sprout", distance);
+        //   sproutChance = 0;
+        // }
+        sproutChance = sproutChance * Math.max(0, 1 - (distance / 100));
+        let delta = nearest.growthStatus - plant.growthStatus;
+        if (delta > 0) {
+          updatedPlant.growthRate =
+            updatedPlant.growthRate * Math.min((1 / delta, 0.5)); // Slow down growth if the nearest plant is bigger
         }
       }
       updatedPlant.growthStatus += updatedPlant.growthRate;
       if (updatedPlant.growthStatus > updatedPlant.seedsAge) {
         for (let i = 0; i < updatedPlant.seedsNum && availableSlots > 0; i++) {
-          if (Math.random() < updatedPlant.sproutChance) {
+          if (Math.random() < sproutChance) {
             const newPlant = {
               id: Math.random(),
               species: updatedPlant.species,
