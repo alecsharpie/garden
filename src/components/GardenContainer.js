@@ -57,7 +57,7 @@ const GardenContainer = () => {
     let newPlants = []; // Array to hold new plants
 
     // First filter out the plants that should die
-    const livingPlants = plantsRef.current.filter((plant) => {
+    let livingPlants = plantsRef.current.filter((plant) => {
       if (plant.growthStatus < plant.lifeSpan) {
         return true;
       } else {
@@ -88,8 +88,9 @@ const GardenContainer = () => {
     ) {
       console.log("adding new plant");
 
-      setPlants([generatePlant("A"), generatePlant("B")]);
-      livingPlants = [generatePlant("A"), generatePlant("B")];
+      const newPlants = [generatePlant("A"), generatePlant("B")];
+      setPlants(newPlants);
+      livingPlants = newPlants.slice();;
     }
 
     // Calculate the number of new plants that can be added
