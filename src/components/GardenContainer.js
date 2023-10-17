@@ -21,6 +21,7 @@ const generatePlant = (species) => {
   return {
     id: Math.random(),
     species: species,
+    img: data.img,
     x: Math.random() * window.innerWidth,
     y: Math.random() * window.innerHeight,
     growthStatus: 1,
@@ -36,9 +37,9 @@ const generatePlant = (species) => {
 
 const GardenContainer = () => {
   const [plants, setPlants] = useState([
-    generatePlant("A"),
-    generatePlant("A"),
-    // generatePlant("B")
+    generatePlant("B"),
+    generatePlant("B"),
+    generatePlant("B")
   ]);
   const [isPlaying, setIsPlaying] = useState(true);
 
@@ -137,6 +138,7 @@ const GardenContainer = () => {
             const newPlant = {
               id: Math.random(),
               species: updatedPlant.species,
+              img: updatedPlant.img,
               x: x_coord,
               y: y_coord,
               growthStatus: 1,
@@ -186,7 +188,7 @@ const GardenContainer = () => {
                 key={plant.id}
                 x={plant.x}
                 y={plant.y}
-                // img={plant.img}
+                img={plant.img}
                 growthStatus={plant.growthStatus}
                 lifeSpan={plant.lifeSpan}
               />

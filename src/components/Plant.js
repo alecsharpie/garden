@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Sprite } from "react-konva";
-import spriteImage from "../images/tree_sprite_3x3_grid_clean_clear.png";
+// import spriteImage from "../images/tree_sprite_3x3_grid_clean_clear.png";
 
-export const Plant = ({ x, y, growthStatus, lifeSpan }) => {
+export const Plant = ({ x, y, img, growthStatus, lifeSpan }) => {
   const [spriteSheet, setSpriteSheet] = useState({
     image: null,
   });
@@ -17,7 +17,7 @@ export const Plant = ({ x, y, growthStatus, lifeSpan }) => {
     }
 
     const image = new window.Image();
-    image.src = spriteImage;
+    image.src = img;
     image.onload = () => {
       setSpriteSheet({
         image: image,
