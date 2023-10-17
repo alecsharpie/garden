@@ -37,11 +37,13 @@ const generatePlant = (species) => {
 
 const GardenContainer = () => {
   const [plants, setPlants] = useState([
+    generatePlant("A"),
+    generatePlant("A"),
     generatePlant("B"),
     generatePlant("B"),
-    generatePlant("B")
   ]);
   const [isPlaying, setIsPlaying] = useState(true);
+  const [shouldRefill, setShouldRefill] = useState(true);
 
   // Simulation loop
   const plantsRef = useRef(plants);
@@ -72,21 +74,22 @@ const GardenContainer = () => {
       .y((d) => d.y)
       .addAll(livingPlants);
 
-    // If all plants are dead, add a new one
-    // if all plants are off screen, add a new one
+    // If all plants are dead or off screen, add a new one
     if (
-      livingPlants.length === 0 ||
-      livingPlants.every(
-        (plant) =>
-          plant.x < 0 ||
-          plant.x > window.innerWidth ||
-          plant.y < 0 ||
-          plant.y > window.innerHeight
-      )
+      shouldRefill &&
+      (livingPlants.length === 0 ||
+        livingPlants.every(
+          (plant) =>
+            plant.x < 0 ||
+            plant.x > window.innerWidth ||
+            plant.y < 0 ||
+            plant.y > window.innerHeight
+        ))
     ) {
       console.log("adding new plant");
-      setPlants([generatePlant("A")]);
-      livingPlants.push(generatePlant("A"));
+
+      setPlants([generatePlant("A"), generatePlant("B")]);
+      livingPlants = [generatePlant("A"), generatePlant("B")];
     }
 
     // Calculate the number of new plants that can be added
@@ -117,10 +120,12 @@ const GardenContainer = () => {
       updatedPlant.growthStatus += updatedPlant.growthRate;
       if (updatedPlant.growthStatus > updatedPlant.seedsAge) {
         for (let i = 0; i < updatedPlant.seedsNum && availableSlots > 0; i++) {
-          const x_coord = updatedPlant.x +
-                (gaussianRand() - 0.5) * updatedPlant.dispersion * 100;
-          const y_coord = updatedPlant.y +
-                (gaussianRand() - 0.5) * updatedPlant.dispersion * 100;
+          const x_coord =
+            updatedPlant.x +
+            (gaussianRand() - 0.5) * updatedPlant.dispersion * 100;
+          const y_coord =
+            updatedPlant.y +
+            (gaussianRand() - 0.5) * updatedPlant.dispersion * 100;
           const sprout_neighbor = tree.find(x_coord, y_coord, 100);
           if (sprout_neighbor) {
             const distance = Math.sqrt(
@@ -176,9 +181,21 @@ const GardenContainer = () => {
 
   return (
     <div>
-      <button onClick={() => setIsPlaying(!isPlaying)}>
-        {isPlaying ? "Pause" : "Play"}
-      </button>
+      <div>
+        <button onClick={() => setIsPlaying(!isPlaying)}>
+          {isPlaying ? "Pause" : "Play"}
+        </button>
+      </div>
+      <div>
+        <label>
+          Auto add plants if none:
+          <input
+            type="checkbox"
+            checked={shouldRefill}
+            onChange={(e) => setShouldRefill(e.target.checked)}
+          />
+        </label>
+      </div>
       <Stage width={window.innerWidth} height={window.innerHeight}>
         <Layer>
           {plants
