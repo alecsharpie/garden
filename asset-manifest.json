@@ -1,17 +1,17 @@
 {
   "files": {
     "main.css": "/garden/static/css/main.e6c13ad2.css",
-    "main.js": "/garden/static/js/main.9b80d063.js",
+    "main.js": "/garden/static/js/main.e35d0417.js",
     "static/js/787.226f672d.chunk.js": "/garden/static/js/787.226f672d.chunk.js",
-    "static/media/mature.png": "/garden/static/media/mature.d77f662d89cee93436cc.png",
-    "static/media/dead.png": "/garden/static/media/dead.80f47a7f78ad150eb6b0.png",
+    "static/media/tree_sprite_3x3_grid_clean_clear.png": "/garden/static/media/tree_sprite_3x3_grid_clean_clear.93908f4e98367be64859.png",
+    "static/media/flowers_sprite_3x3_grid.png": "/garden/static/media/flowers_sprite_3x3_grid.90d4881dce66680cb270.png",
     "index.html": "/garden/index.html",
     "main.e6c13ad2.css.map": "/garden/static/css/main.e6c13ad2.css.map",
-    "main.9b80d063.js.map": "/garden/static/js/main.9b80d063.js.map",
+    "main.e35d0417.js.map": "/garden/static/js/main.e35d0417.js.map",
     "787.226f672d.chunk.js.map": "/garden/static/js/787.226f672d.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.e6c13ad2.css",
-    "static/js/main.9b80d063.js"
+    "static/js/main.e35d0417.js"
   ]
 }
