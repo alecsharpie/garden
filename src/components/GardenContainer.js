@@ -22,6 +22,7 @@ const generatePlant = (species) => {
     id: Math.random(),
     species: species,
     img: data.img,
+    animationCoords: data.animationCoords,
     x: Math.random() * window.innerWidth,
     y: Math.random() * window.innerHeight,
     growthStatus: 1,
@@ -39,8 +40,8 @@ const GardenContainer = () => {
   const [plants, setPlants] = useState([
     generatePlant("A"),
     generatePlant("A"),
-    generatePlant("B"),
-    generatePlant("B"),
+    // generatePlant("B"),
+    // generatePlant("B"),
   ]);
   const [isPlaying, setIsPlaying] = useState(true);
   const [shouldRefill, setShouldRefill] = useState(true);
@@ -86,7 +87,7 @@ const GardenContainer = () => {
             plant.y > window.innerHeight
         ))
     ) {
-      console.log("adding new plant");
+      console.log("autorefill plants");
 
       const newPlants = [generatePlant("A"), generatePlant("B")];
       setPlants(newPlants);
@@ -145,6 +146,7 @@ const GardenContainer = () => {
               id: Math.random(),
               species: updatedPlant.species,
               img: updatedPlant.img,
+              animationCoords: updatedPlant.animationCoords,
               x: x_coord,
               y: y_coord,
               growthStatus: 1,
@@ -207,6 +209,7 @@ const GardenContainer = () => {
                 x={plant.x}
                 y={plant.y}
                 img={plant.img}
+                animationCoords={plant.animationCoords}
                 growthStatus={plant.growthStatus}
                 lifeSpan={plant.lifeSpan}
               />
