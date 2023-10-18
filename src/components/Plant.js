@@ -12,9 +12,9 @@ export const Plant = ({ x, y, img, animationCoords, growthStatus, lifeSpan }) =>
   useEffect(() => {
     const sprite = spriteRef.current;
     if (sprite) {
-      const stage = Math.floor(
+      const stage = Math.min(Math.floor(
         (growthStatus / lifeSpan) * Object.keys(animationCoords).length
-      );
+      ), Object.keys(animationCoords).length - 1);
       sprite.animation(stage);
     }
 

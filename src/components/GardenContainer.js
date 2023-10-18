@@ -40,8 +40,8 @@ const GardenContainer = () => {
   const [plants, setPlants] = useState([
     generatePlant("A"),
     generatePlant("A"),
-    // generatePlant("B"),
-    // generatePlant("B"),
+    generatePlant("B"),
+    generatePlant("B"),
   ]);
   const [isPlaying, setIsPlaying] = useState(true);
   const [shouldRefill, setShouldRefill] = useState(true);
