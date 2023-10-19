@@ -1,8 +1,14 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import { Stage, Layer } from "react-konva";
+import { Stage, Layer, Image } from "react-konva";
 import { Plant } from "./Plant";
 import { speciesData } from "../consts/SpeciesData";
 import { quadtree } from "d3-quadtree";
+import useImage from "use-image";
+
+const BackgroundImage = () => {
+  const [image] = useImage("../images/tree_sprite_3x3_grid.png");
+  return <Image image={image} />;
+};
 
 function gaussianRand() {
   var rand = 0;
@@ -38,10 +44,17 @@ const generatePlant = (species) => {
 
 const GardenContainer = () => {
   const [plants, setPlants] = useState([
-    generatePlant("A"),
-    generatePlant("A"),
-    generatePlant("B"),
-    generatePlant("B"),
+    generatePlant("tree"),
+    generatePlant("grass"),
+    generatePlant("grass"),
+    generatePlant("grass"),
+    generatePlant("grass"),
+    generatePlant("grass"),
+    generatePlant("yellowFlower"),
+    generatePlant("whiteFlower"),
+    generatePlant("lightPinkFlower"),
+    generatePlant("pinkFlower"),
+    generatePlant("tulipFlower")
   ]);
   const [isPlaying, setIsPlaying] = useState(true);
   const [shouldRefill, setShouldRefill] = useState(true);
@@ -89,7 +102,7 @@ const GardenContainer = () => {
     ) {
       console.log("autorefill plants");
 
-      const newPlants = [generatePlant("A"), generatePlant("B")];
+      const newPlants = [generatePlant("tree"), generatePlant("grass")];
       setPlants(newPlants);
       livingPlants = newPlants.slice();;
     }
@@ -200,6 +213,9 @@ const GardenContainer = () => {
         </label>
       </div>
       <Stage width={window.innerWidth} height={window.innerHeight}>
+        <Layer>
+          <BackgroundImage />
+        </Layer>
         <Layer>
           {plants
             .sort((a, b) => a.y - b.y)
