@@ -1,16 +1,18 @@
 {
   "files": {
     "main.css": "/garden/static/css/main.e6c13ad2.css",
-    "main.js": "/garden/static/js/main.7d4e7fc8.js",
+    "main.js": "/garden/static/js/main.38ea4087.js",
     "static/js/787.226f672d.chunk.js": "/garden/static/js/787.226f672d.chunk.js",
-    "static/media/tree_sprite_3x3_grid_clean_clear.png": "/garden/static/media/tree_sprite_3x3_grid_clean_clear.93908f4e98367be64859.png",
+    "static/media/tree_sprite_3x3_grid.png": "/garden/static/media/tree_sprite_3x3_grid.93908f4e98367be64859.png",
+    "static/media/light_pink_flower_sprite_3x1_grid.png": "/garden/static/media/light_pink_flower_sprite_3x1_grid.e9aeef7c692ea2ad40c6.png",
+    "static/media/pink_flower_sprite_3x1_grid.png": "/garden/static/media/pink_flower_sprite_3x1_grid.983ab27a0c4132358940.png",
     "index.html": "/garden/index.html",
     "main.e6c13ad2.css.map": "/garden/static/css/main.e6c13ad2.css.map",
-    "main.7d4e7fc8.js.map": "/garden/static/js/main.7d4e7fc8.js.map",
+    "main.38ea4087.js.map": "/garden/static/js/main.38ea4087.js.map",
     "787.226f672d.chunk.js.map": "/garden/static/js/787.226f672d.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.e6c13ad2.css",
-    "static/js/main.7d4e7fc8.js"
+    "static/js/main.38ea4087.js"
   ]
 }
