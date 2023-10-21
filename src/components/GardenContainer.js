@@ -68,7 +68,7 @@ const GardenContainer = () => {
 
   const animate = useCallback(() => {
     console.log("animate");
-    let newPlants = []; // Array to hold new plants
+    let newPlants = [];
 
     // First filter out the plants that should die
     let livingPlants = plantsRef.current.filter((plant) => {
