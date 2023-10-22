@@ -231,7 +231,13 @@ const GardenContainer = () => {
       </div>
       <Stage width={window.innerWidth} height={window.innerHeight}>
         <Layer>
-          <Image x={0} y={0} image={image} />
+          <Image
+            x={0}
+            y={0}
+            image={image}
+            width={window.innerWidth}
+            height={window.innerHeight}
+          />
         </Layer>
         <Layer>
           {plants
