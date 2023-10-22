@@ -4,11 +4,9 @@ import { Plant } from "./Plant";
 import { speciesData } from "../consts/SpeciesData";
 import { quadtree } from "d3-quadtree";
 import useImage from "use-image";
-
-const BackgroundImage = () => {
-  const [image] = useImage("../images/tree_sprite_3x3_grid.png");
-  return <Image image={image} />;
-};
+// import { Sprite } from "react-konva";
+// import { Image } from "react-konva";
+import backgroundImagePng from "../images/background.png";
 
 function gaussianRand() {
   var rand = 0;
@@ -58,6 +56,25 @@ const GardenContainer = () => {
   ]);
   const [isPlaying, setIsPlaying] = useState(true);
   const [shouldRefill, setShouldRefill] = useState(true);
+
+  //  const [backgroundImage, setbackgroundImage] = useState({
+  //    image: null,
+  //  });
+
+     const [image] = useImage(backgroundImagePng);
+
+
+  //  const backgroundImageRef = useRef();
+
+  //  useEffect(() => {
+  //    const image = new window.Image();
+  //    image.src = backgroundImagePng;
+  //    image.onload = () => {
+  //      setbackgroundImage({
+  //        image: image,
+  //      });
+  //    };
+  //  }, []);
 
   // Simulation loop
   const plantsRef = useRef(plants);
@@ -214,7 +231,7 @@ const GardenContainer = () => {
       </div>
       <Stage width={window.innerWidth} height={window.innerHeight}>
         <Layer>
-          <BackgroundImage />
+          <Image x={0} y={0} image={image} />
         </Layer>
         <Layer>
           {plants
