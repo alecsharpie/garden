@@ -10,10 +10,10 @@ export const speciesData = {
   tree: {
     baseGrowthRate: 0.1,
     seedsNum: 1,
-    seedsAge: 50,
-    sproutChance: 0.1,
-    dispersion: 5,
-    lifeSpan: 200,
+    seedsAge: 100,
+    sproutChance: 0.01,
+    dispersion: 50,
+    lifeSpan: 150,
     img: spriteTreeImage,
     animationCoords: {
       0: [0, 0, 256, 256],
@@ -46,7 +46,7 @@ export const speciesData = {
     seedsNum: 1,
     seedsAge: 50,
     sproutChance: 0.1,
-    dispersion: 5,
+    dispersion: 15,
     lifeSpan: 100,
     img: spriteYellowFlowerImage,
     animationCoords: {
@@ -88,7 +88,7 @@ export const speciesData = {
     seedsNum: 1,
     seedsAge: 50,
     sproutChance: 0.1,
-    dispersion: 5,
+    dispersion: 50,
     lifeSpan: 100,
     img: spritePinkFlowerImage,
     animationCoords: {
@@ -102,7 +102,7 @@ export const speciesData = {
     seedsNum: 1,
     seedsAge: 50,
     sproutChance: 0.1,
-    dispersion: 5,
+    dispersion: 50,
     lifeSpan: 100,
     img: spriteLightPinkFlowerImage,
     animationCoords: {
