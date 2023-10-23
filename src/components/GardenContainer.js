@@ -40,41 +40,34 @@ const generatePlant = (species) => {
   };
 };
 
+const generatePlants = (plantsObject) => {
+  let plants = [];
+  for (let plant in plantsObject) {
+    for (let i = 0; i < plantsObject[plant]; i++) {
+      plants.push(generatePlant(plant));
+    }
+  }
+  return plants;
+};
+
 const GardenContainer = () => {
-  const [plants, setPlants] = useState([
-    generatePlant("tree"),
-    generatePlant("grass"),
-    generatePlant("grass"),
-    generatePlant("grass"),
-    generatePlant("grass"),
-    generatePlant("grass"),
-    generatePlant("yellowFlower"),
-    generatePlant("whiteFlower"),
-    generatePlant("lightPinkFlower"),
-    generatePlant("pinkFlower"),
-    generatePlant("tulipFlower")
-  ]);
+  const [plants, setPlants] = useState(
+    generatePlants({
+      tree: 1,
+      grass: 10,
+      yellowFlower: 3,
+      whiteFlower: 3,
+      lightPinkFlower: 2,
+      pinkFlower: 2,
+      tulipFlower: 1,
+    })
+  );
   const [isPlaying, setIsPlaying] = useState(true);
   const [shouldRefill, setShouldRefill] = useState(true);
 
-  //  const [backgroundImage, setbackgroundImage] = useState({
-  //    image: null,
-  //  });
 
      const [image] = useImage(backgroundImagePng);
 
-
-  //  const backgroundImageRef = useRef();
-
-  //  useEffect(() => {
-  //    const image = new window.Image();
-  //    image.src = backgroundImagePng;
-  //    image.onload = () => {
-  //      setbackgroundImage({
-  //        image: image,
-  //      });
-  //    };
-  //  }, []);
 
   // Simulation loop
   const plantsRef = useRef(plants);
@@ -213,21 +206,23 @@ const GardenContainer = () => {
   }, [isPlaying, animate]);
 
   return (
-    <div>
-      <div>
-        <button onClick={() => setIsPlaying(!isPlaying)}>
-          {isPlaying ? "Pause" : "Play"}
-        </button>
-      </div>
-      <div>
-        <label>
-          Auto add plants if none:
-          <input
-            type="checkbox"
-            checked={shouldRefill}
-            onChange={(e) => setShouldRefill(e.target.checked)}
-          />
-        </label>
+    <div style={{ position: "relative" }}>
+      <div style={{ position: "absolute", zIndex: 1 }}>
+        <div>
+          <button onClick={() => setIsPlaying(!isPlaying)}>
+            {isPlaying ? "Pause" : "Play"}
+          </button>
+        </div>
+        <div>
+          <label>
+            Auto add plants if none:
+            <input
+              type="checkbox"
+              checked={shouldRefill}
+              onChange={(e) => setShouldRefill(e.target.checked)}
+            />
+          </label>
+        </div>
       </div>
       <Stage width={window.innerWidth} height={window.innerHeight}>
         <Layer>

@@ -27,16 +27,25 @@ export const Plant = ({ x, y, img, animationCoords, growthStatus, lifeSpan }) =>
     };
   }, [growthStatus, lifeSpan]);
 
+  const minScale = 0.5;
+  const maxScale = 1;
+  const minY = 200;
+  const maxY = window.innerHeight;
+
+  // Map y value from [minY, maxY] to [minScale, maxScale]
+  const scale = minScale + ((y - minY) / (maxY - minY)) * (maxScale - minScale);
+
   return (
     <Sprite
       ref={spriteRef}
       x={x}
-      y={y}
+      y={Math.max(y, 200)} // plants can't spawn in sky
       image={spriteSheet.image}
       animation={0}
       animations={animationCoords}
       frameRate={10}
       frameIndex={0}
+      scale={{ x: scale, y: scale }}
     />
   );
 };
