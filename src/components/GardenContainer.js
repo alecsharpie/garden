@@ -21,14 +21,15 @@ const generatePlant = (species) => {
   if (!data) {
     throw new Error(`Unknown species: ${species}`);
   }
-
   return {
     id: Math.random(),
     species: species,
     img: data.img,
     animationCoords: data.animationCoords,
     x: Math.random() * window.innerWidth,
-    y: Math.random() * window.innerHeight,
+    y:
+      Math.random() * (window.innerHeight - window.innerHeight * 0.28) +
+      window.innerHeight * 0.28, // Can't spawn in the sky
     growthStatus: 1,
     growthRate: data.baseGrowthRate + Math.random() * data.baseGrowthRate * 2,
     lifeCycle: "seed",
@@ -54,7 +55,7 @@ const GardenContainer = () => {
   const [plants, setPlants] = useState(
     generatePlants({
       tree: 1,
-      grass: 10,
+      grass: 20,
       yellowFlower: 3,
       whiteFlower: 3,
       lightPinkFlower: 2,
@@ -66,7 +67,7 @@ const GardenContainer = () => {
   const [shouldRefill, setShouldRefill] = useState(true);
 
 
-     const [image] = useImage(backgroundImagePng);
+  const [image] = useImage(backgroundImagePng);
 
 
   // Simulation loop
@@ -82,7 +83,13 @@ const GardenContainer = () => {
 
     // First filter out the plants that should die
     let livingPlants = plantsRef.current.filter((plant) => {
-      if (plant.growthStatus < plant.lifeSpan) {
+      if (
+        plant.growthStatus < plant.lifeSpan &&
+        plant.x >= 0 &&
+        plant.x <= window.innerWidth &&
+        plant.y >= (0.28 * window.innerHeight) &&
+        plant.y <= window.innerHeight
+      ) {
         return true;
       } else {
         // Here we add a random chance for the plant to survive even if its growthStatus is greater than its lifeSpan.
@@ -118,10 +125,11 @@ const GardenContainer = () => {
     }
 
     // Calculate the number of new plants that can be added
-    let availableSlots = 1000 - plantsRef.current.length;
+    let availableSlots = 2000 - plantsRef.current.length;
 
     // Then map over the remaining plants to update their properties
     const updatedPlants = livingPlants.map((plant) => {
+
       let updatedPlant = { ...plant }; // Create a new object to avoid mutation
 
       let sproutChance = updatedPlant.sproutChance;
@@ -130,17 +138,13 @@ const GardenContainer = () => {
       const nearest = tree.find(plant.x, plant.y, 100); // Find the nearest plant within a radius of 50
       tree.add(plant);
       if (nearest) {
-        console.log("plant x", plant.x);
-        console.log("plant y", plant.y);
-        console.log("nearest x", nearest.x);
-        console.log("nearest y", nearest.y);
 
-        // Slow down growth if the nearest plant is bigger
-        const delta = nearest.growthStatus - plant.growthStatus;
-        if (delta > 0) {
-          updatedPlant.growthRate =
-            updatedPlant.growthRate * Math.min((1 / delta, 0.5));
-        }
+        // // Slow down growth if the nearest plant is bigger
+        // const delta = nearest.growthStatus - plant.growthStatus;
+        // if (delta > 0) {
+        //   updatedPlant.growthRate =
+        //     updatedPlant.growthRate * Math.min((1 / delta, 0.5));
+        // }
       }
       updatedPlant.growthStatus += updatedPlant.growthRate;
       if (updatedPlant.growthStatus > updatedPlant.seedsAge) {

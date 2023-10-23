@@ -13,7 +13,7 @@ export const speciesData = {
     seedsAge: 50,
     sproutChance: 0.1,
     dispersion: 5,
-    lifeSpan: 100,
+    lifeSpan: 200,
     img: spriteTreeImage,
     animationCoords: {
       0: [0, 0, 256, 256],
@@ -29,11 +29,11 @@ export const speciesData = {
   },
   grass: {
     baseGrowthRate: 0.1,
-    seedsNum: 1,
-    seedsAge: 50,
-    sproutChance: 0.1,
-    dispersion: 5,
-    lifeSpan: 100,
+    seedsNum: 10,
+    seedsAge: 5,
+    sproutChance: 0.5,
+    dispersion: 10,
+    lifeSpan: 30,
     img: spriteGrassImage,
     animationCoords: {
       0: [0, 0, 256, 256],
