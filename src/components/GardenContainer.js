@@ -8,6 +8,8 @@ import useImage from "use-image";
 // import { Image } from "react-konva";
 import backgroundImagePng from "../images/background.png";
 
+const groundHeight = 0.39 * window.innerHeight; // where sky meets ground, height of sky
+
 function gaussianRand() {
   var rand = 0;
   for (var i = 0; i < 6; i += 1) {
@@ -27,9 +29,7 @@ const generatePlant = (species) => {
     img: data.img,
     animationCoords: data.animationCoords,
     x: Math.random() * window.innerWidth,
-    y:
-      Math.random() * (window.innerHeight - window.innerHeight * 0.28) +
-      window.innerHeight * 0.28, // Can't spawn in the sky
+    y: Math.random() * (window.innerHeight - groundHeight) + groundHeight, // Can't spawn in the sky
     growthStatus: 1,
     growthRate: data.baseGrowthRate + Math.random() * data.baseGrowthRate * 2,
     lifeCycle: "seed",
@@ -65,31 +65,40 @@ const GardenContainer = () => {
   );
   const [isPlaying, setIsPlaying] = useState(true);
   const [shouldRefill, setShouldRefill] = useState(true);
+  const [timePast, setTimePast] = useState(0);
 
 
   const [image] = useImage(backgroundImagePng);
 
-
   // Simulation loop
   const plantsRef = useRef(plants);
+
+  const stageRef = useRef();
+
+  const downloadScreenshot = () => {
+    const dataUrl = stageRef.current.toDataURL();
+    const link = document.createElement("a");
+    link.download = "screenshot.png";
+    link.href = dataUrl;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   useEffect(() => {
     plantsRef.current = plants;
   }, [plants]);
 
   const animate = useCallback(() => {
-    console.log("animate");
+
+    setTimePast((timePast) => timePast + 0.2);
+
     let newPlants = [];
 
     // First filter out the plants that should die
     let livingPlants = plantsRef.current.filter((plant) => {
       if (
-        plant.growthStatus < plant.lifeSpan &&
-        plant.x >= 0 &&
-        plant.x <= window.innerWidth &&
-        plant.y >= (0.28 * window.innerHeight) &&
-        plant.y <= window.innerHeight
-      ) {
+        plant.growthStatus < plant.lifeSpan ) {
         return true;
       } else {
         // Here we add a random chance for the plant to survive even if its growthStatus is greater than its lifeSpan.
@@ -125,10 +134,10 @@ const GardenContainer = () => {
     }
 
     // Calculate the number of new plants that can be added
-    let availableSlots = 2000 - plantsRef.current.length;
+    let availableSlots = 500 - plantsRef.current.length;
 
     // Then map over the remaining plants to update their properties
-    const updatedPlants = livingPlants.map((plant) => {
+    let updatedPlants = livingPlants.map((plant) => {
 
       let updatedPlant = { ...plant }; // Create a new object to avoid mutation
 
@@ -147,6 +156,7 @@ const GardenContainer = () => {
         // }
       }
       updatedPlant.growthStatus += updatedPlant.growthRate;
+
       if (updatedPlant.growthStatus > updatedPlant.seedsAge) {
         for (let i = 0; i < updatedPlant.seedsNum && availableSlots > 0; i++) {
           const x_coord =
@@ -154,7 +164,7 @@ const GardenContainer = () => {
             (gaussianRand() - 0.5) * updatedPlant.dispersion * 100;
           const y_coord =
             updatedPlant.y +
-            (gaussianRand() - 0.5) * updatedPlant.dispersion * 100;
+              (gaussianRand() - 0.5) * updatedPlant.dispersion * 100;
           const sprout_neighbor = tree.find(x_coord, y_coord, 100);
           if (sprout_neighbor) {
             const distance = Math.sqrt(
@@ -165,7 +175,8 @@ const GardenContainer = () => {
               console.log("too close to sprout", distance);
               sproutChance = 0;
             } else {
-              sproutChance = sproutChance * Math.max(0, 1 - distance / 100);
+              sproutChance =
+                sproutChance * Math.max(0, 1 - distance / 100) + 0.1;
             }
           }
           if (Math.random() < sproutChance) {
@@ -192,9 +203,24 @@ const GardenContainer = () => {
       return updatedPlant;
     });
 
+    const allPlants = [...updatedPlants, ...newPlants]
+
+    const displayPlants = allPlants.filter((plant) => {
+      if (
+        plant.x >= 0 &&
+        plant.x <= window.innerWidth &&
+        plant.y >= groundHeight &&
+        plant.y <= window.innerHeight
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    });
+
     // Update plantsRef.current and plants state
-    plantsRef.current = [...updatedPlants, ...newPlants];
-    setPlants([...updatedPlants, ...newPlants]);
+    plantsRef.current = displayPlants;
+    setPlants(displayPlants);
   }, [plants]);
 
   useEffect(() => {
@@ -227,8 +253,25 @@ const GardenContainer = () => {
             />
           </label>
         </div>
+        <div>
+          <button onClick={downloadScreenshot}>Download Screenshot</button>
+        </div>
+        <div>
+          {timePast < 365 ? (
+            <div>Days: {Math.floor(timePast)}</div>
+          ) : (
+            <>
+              <div>Years: {Math.floor(timePast / 365)}</div>
+              <div>Days: {Math.floor(timePast % 365)}</div>
+            </>
+          )}
+        </div>
       </div>
-      <Stage width={window.innerWidth} height={window.innerHeight}>
+      <Stage
+        ref={stageRef}
+        width={window.innerWidth}
+        height={window.innerHeight}
+      >
         <Layer>
           <Image
             x={0}
