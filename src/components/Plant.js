@@ -2,7 +2,14 @@ import React, { useState, useEffect, useRef } from "react";
 import { Sprite } from "react-konva";
 // import spriteImage from "../images/tree_sprite_3x3_grid_clean_clear.png";
 
-export const Plant = ({ x, y, img, animationCoords, growthStatus, lifeSpan }) => {
+export const Plant = ({
+  x,
+  y,
+  img,
+  animationCoords,
+  growthStatus,
+  lifeSpan,
+}) => {
   const [spriteSheet, setSpriteSheet] = useState({
     image: null,
   });
@@ -12,9 +19,12 @@ export const Plant = ({ x, y, img, animationCoords, growthStatus, lifeSpan }) =>
   useEffect(() => {
     const sprite = spriteRef.current;
     if (sprite) {
-      const stage = Math.min(Math.floor(
-        (growthStatus / lifeSpan) * Object.keys(animationCoords).length
-      ), Object.keys(animationCoords).length - 1);
+      const stage = Math.min(
+        Math.floor(
+          (growthStatus / lifeSpan) * Object.keys(animationCoords).length,
+        ),
+        Object.keys(animationCoords).length - 1,
+      );
       sprite.animation(stage);
     }
 
@@ -33,7 +43,11 @@ export const Plant = ({ x, y, img, animationCoords, growthStatus, lifeSpan }) =>
   const maxY = window.innerHeight;
 
   // Map y value from [minY, maxY] to [minScale, maxScale]
-  const scale = minScale + ((y - minY) / (maxY - minY)) * (maxScale - minScale) * (growthStatus / lifeSpan);
+  const scale =
+    minScale +
+    ((y - minY) / (maxY - minY)) *
+      (maxScale - minScale) *
+      (growthStatus / lifeSpan);
 
   return (
     <Sprite

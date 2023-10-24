@@ -14,7 +14,6 @@ import iconTulipFlowerImage from "../images/icons/tulip_flower_icon.png";
 import iconWhiteFlowerImage from "../images/icons/white_flower_icon.png";
 import iconYellowFlowerImage from "../images/icons/yellow_flower_icon.png";
 
-
 export const speciesData = {
   tree: {
     baseGrowthRate: 0.1,

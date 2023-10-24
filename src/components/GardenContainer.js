@@ -9,8 +9,6 @@ import backgroundImagePng from "../images/background.png";
 import DraggableSprite from "./DraggableSprite";
 import "./GardenContainer.css";
 
-
-
 const groundHeight = 0.39 * window.innerHeight; // where sky meets ground, height of sky
 
 function gaussianRand() {
@@ -64,12 +62,11 @@ const GardenContainer = () => {
       lightPinkFlower: 2,
       pinkFlower: 2,
       tulipFlower: 1,
-    })
+    }),
   );
   const [isPlaying, setIsPlaying] = useState(true);
   const [shouldRefill, setShouldRefill] = useState(false);
   const [timePast, setTimePast] = useState(0);
-
 
   const [image] = useImage(backgroundImagePng);
 
@@ -78,9 +75,9 @@ const GardenContainer = () => {
 
   const stageRef = useRef();
 
-    const clearPlants = () => {
-      setPlants([]);
-    };
+  const clearPlants = () => {
+    setPlants([]);
+  };
 
   const downloadScreenshot = () => {
     const dataUrl = stageRef.current.toDataURL();
@@ -91,7 +88,6 @@ const GardenContainer = () => {
     link.click();
     document.body.removeChild(link);
   };
-
 
   // Inside GardenContainer component
   const [, drop] = useDrop({
@@ -110,15 +106,13 @@ const GardenContainer = () => {
   }, [plants]);
 
   const animate = useCallback(() => {
-
     setTimePast((timePast) => timePast + 0.2);
 
     let newPlants = [];
 
     // First filter out the plants that should die
     let livingPlants = plantsRef.current.filter((plant) => {
-      if (
-        plant.growthStatus < plant.lifeSpan ) {
+      if (plant.growthStatus < plant.lifeSpan) {
         return true;
       } else {
         // Here we add a random chance for the plant to survive even if its growthStatus is greater than its lifeSpan.
@@ -143,14 +137,14 @@ const GardenContainer = () => {
             plant.x < 0 ||
             plant.x > window.innerWidth ||
             plant.y < 0 ||
-            plant.y > window.innerHeight
+            plant.y > window.innerHeight,
         ))
     ) {
       console.log("autorefill plants");
 
       const newPlants = [generatePlant("tree"), generatePlant("grass")];
       setPlants(newPlants);
-      livingPlants = newPlants.slice();;
+      livingPlants = newPlants.slice();
     }
 
     // Calculate the number of new plants that can be added
@@ -158,7 +152,6 @@ const GardenContainer = () => {
 
     // Then map over the remaining plants to update their properties
     let updatedPlants = livingPlants.map((plant) => {
-
       let updatedPlant = { ...plant }; // Create a new object to avoid mutation
 
       let sproutChance = updatedPlant.sproutChance;
@@ -167,7 +160,6 @@ const GardenContainer = () => {
       const nearest = tree.find(plant.x, plant.y, 100); // Find the nearest plant within a radius of 50
       tree.add(plant);
       if (nearest) {
-
         // // Slow down growth if the nearest plant is bigger
         // const delta = nearest.growthStatus - plant.growthStatus;
         // if (delta > 0) {
@@ -184,12 +176,12 @@ const GardenContainer = () => {
             (gaussianRand() - 0.5) * updatedPlant.dispersion * 100;
           const y_coord =
             updatedPlant.y +
-              (gaussianRand() - 0.5) * updatedPlant.dispersion * 100;
+            (gaussianRand() - 0.5) * updatedPlant.dispersion * 100;
           const sprout_neighbor = tree.find(x_coord, y_coord, 100);
           if (sprout_neighbor) {
             const distance = Math.sqrt(
               (plant.x - sprout_neighbor.x) ** 2 +
-                (plant.y - sprout_neighbor.y) ** 2
+                (plant.y - sprout_neighbor.y) ** 2,
             );
             if (distance < 10) {
               console.log("too close to sprout", distance);
@@ -223,7 +215,7 @@ const GardenContainer = () => {
       return updatedPlant;
     });
 
-    const allPlants = [...updatedPlants, ...newPlants]
+    const allPlants = [...updatedPlants, ...newPlants];
 
     const displayPlants = allPlants.filter((plant) => {
       if (

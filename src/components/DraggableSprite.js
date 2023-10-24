@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from "react";
 import { useDrag } from "react-dnd";
 
 const DraggableSprite = ({ species, iconImage }) => {
-
   const [{ isDragging }, drag] = useDrag(() => ({
     type: "sprite",
     item: { species },
