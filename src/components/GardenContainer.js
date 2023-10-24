@@ -258,6 +258,14 @@ const GardenContainer = () => {
     <div style={{ position: "relative" }}>
       <div style={{ position: "absolute", zIndex: 1 }}>
         <div>
+          <h1>Do Nothing Forest</h1>
+        </div>
+        <div>
+          <p>
+            Made by{" "}<a href="https://www.alecsharpie.me/">Alec Sharp</a>
+          </p>
+        </div>
+        <div>
           <button onClick={() => setIsPlaying(!isPlaying)}>
             {isPlaying ? "Pause" : "Play"}
           </button>
@@ -277,6 +285,11 @@ const GardenContainer = () => {
         </div>
         <div>
           <button onClick={clearPlants}>Clear Plants</button>
+        </div>
+        <div>
+          <button onClick={() => setPlants(generatePlants({ tree: 1 }))}>
+            {"More trees!"}
+          </button>
         </div>
         <div>
           <p>Drag and drop to add plants:</p>
