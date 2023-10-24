@@ -1,0 +1,46 @@
+/* GardenContainer.css */
+
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 0px;
+    padding: 10px;
+    background-color: #7ae6fd;
+}
+
+.container div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.container button,
+.container input[type="checkbox"],
+.container label {
+    margin-left: 10px;
+}
+
+.container a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.container a:hover {
+    text-decoration: underline;
+}
+
+.container .flex-row {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0px;
+}
+
+.container .row {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0px;
+}
+
+.time-counter {
+    margin-bottom: 15px;
+}

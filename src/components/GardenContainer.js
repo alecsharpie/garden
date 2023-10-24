@@ -7,6 +7,7 @@ import useImage from "use-image";
 import { useDrop } from "react-dnd";
 import backgroundImagePng from "../images/background.png";
 import DraggableSprite from "./DraggableSprite";
+import "./GardenContainer.css";
 
 
 
@@ -256,43 +257,63 @@ const GardenContainer = () => {
 
   return (
     <div style={{ position: "relative" }}>
-      <div style={{ position: "absolute", zIndex: 1 }}>
-        <div>
-          <h1>Do Nothing Forest</h1>
+      <div className="container" style={{ position: "absolute", zIndex: 1 }}>
+        <div className="row">
+          <div>
+            <h1>Do Nothing Forest</h1>
+          </div>
         </div>
-        <div>
-          <p>
-            Made by{" "}<a href="https://www.alecsharpie.me/">Alec Sharp</a>
-          </p>
+        <div className="row">
+          <div>
+            <p>
+              Made by <a href="https://www.alecsharpie.me/">Alec Sharp</a>
+            </p>
+          </div>
         </div>
-        <div>
-          <button onClick={() => setIsPlaying(!isPlaying)}>
-            {isPlaying ? "Pause" : "Play"}
-          </button>
+        <div className="row">
+          <div className="time-counter">
+            {timePast < 365 ? (
+              <div>Days: {Math.floor(timePast)}</div>
+            ) : (
+              <>
+                <div>Years: {Math.floor(timePast / 365)}</div>
+                <div>Days: {Math.floor(timePast % 365)}</div>
+              </>
+            )}
+          </div>
         </div>
-        <div>
-          <label>
-            Auto add plants if none:
-            <input
-              type="checkbox"
-              checked={shouldRefill}
-              onChange={(e) => setShouldRefill(e.target.checked)}
-            />
-          </label>
-        </div>
-        <div>
-          <button onClick={downloadScreenshot}>Download Screenshot</button>
-        </div>
-        <div>
-          <button onClick={clearPlants}>Clear Plants</button>
-        </div>
-        <div>
-          <button onClick={() => setPlants(generatePlants({ tree: 1 }))}>
-            {"More trees!"}
-          </button>
+        <div className="row">
+          <div>
+            <button onClick={() => setIsPlaying(!isPlaying)}>
+              {isPlaying ? "Pause" : "Play"}
+            </button>
+          </div>
+          <div>
+            <button onClick={downloadScreenshot}>Download Screenshot</button>
+          </div>
+          <div>
+            <button onClick={clearPlants}>Clear Plants</button>
+          </div>
+          <div>
+            <button onClick={() => setPlants(generatePlants({ tree: 1 }))}>
+              {"More trees!"}
+            </button>
+          </div>
+          <div>
+            <label>
+              Auto add plants if none:
+              <input
+                type="checkbox"
+                checked={shouldRefill}
+                onChange={(e) => setShouldRefill(e.target.checked)}
+              />
+            </label>
+          </div>
         </div>
         <div>
           <p>Drag and drop to add plants:</p>
+        </div>
+        <div className="flex-row">
           {Object.entries(speciesData).map(([species, data]) => (
             <DraggableSprite
               key={species}
@@ -300,16 +321,6 @@ const GardenContainer = () => {
               iconImage={data.icon}
             />
           ))}
-        </div>
-        <div>
-          {timePast < 365 ? (
-            <div>Days: {Math.floor(timePast)}</div>
-          ) : (
-            <>
-              <div>Years: {Math.floor(timePast / 365)}</div>
-              <div>Days: {Math.floor(timePast % 365)}</div>
-            </>
-          )}
         </div>
       </div>
       <div ref={drop}>
