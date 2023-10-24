@@ -43,7 +43,7 @@ export const Plant = ({
         image: image,
       });
     };
-  }, [growthStatus, lifeSpan]);
+  }, [growthStatus, lifeSpan, animationCoords, img]);
 
   const minScale = 0.2;
   const maxScale = 2;

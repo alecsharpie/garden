@@ -235,7 +235,7 @@ const GardenContainer = () => {
     // Update plantsRef.current and plants state
     plantsRef.current = displayPlants;
     setPlants(displayPlants);
-  }, [plants]);
+  }, [shouldRefill]);
 
   useEffect(() => {
     let intervalId;
@@ -278,7 +278,10 @@ const GardenContainer = () => {
         </div>
         <div className="row">
           <div>
-            <button onClick={() => setIsPlaying(!isPlaying)}>
+            <button
+              className="fixed-width-button"
+               onClick={() => setIsPlaying(!isPlaying)}
+            >
               {isPlaying ? "Pause" : "Play"}
             </button>
           </div>
