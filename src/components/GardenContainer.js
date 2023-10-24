@@ -39,6 +39,7 @@ const generatePlant = (species) => {
     sproutChance: data.sproutChance,
     dispersion: data.dispersion,
     lifeSpan: data.lifeSpan,
+    flip: Math.random() < 0.5 ? -1 : 1, // flip the plant half the time
   };
 };
 
@@ -206,6 +207,7 @@ const GardenContainer = () => {
               sproutChance: updatedPlant.sproutChance,
               lifeSpan: updatedPlant.lifeSpan,
               dispersion: updatedPlant.dispersion + gaussianRand() * 0.1,
+              flip:  Math.random() < 0.5 ? -1 : 1 // flip the plant half the time
             };
             newPlants.push(newPlant);
             availableSlots--;
@@ -342,6 +344,7 @@ const GardenContainer = () => {
                   animationCoords={plant.animationCoords}
                   growthStatus={plant.growthStatus}
                   lifeSpan={plant.lifeSpan}
+                  flip={plant.flip}
                 />
               ))}
           </Layer>

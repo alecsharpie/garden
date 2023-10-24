@@ -9,6 +9,7 @@ export const Plant = ({
   animationCoords,
   growthStatus,
   lifeSpan,
+  flip
 }) => {
   const [spriteSheet, setSpriteSheet] = useState({
     image: null,
@@ -19,11 +20,18 @@ export const Plant = ({
   useEffect(() => {
     const sprite = spriteRef.current;
     if (sprite) {
+      const base = 2; // log base, change this to adjust the rate of increase
+      const linearWeight = 0.8; // linear component (growthStatus / lifeSpan)
+      const logWeight = 0.2; // logarithmic component
+
       const stage = Math.min(
         Math.floor(
-          (growthStatus / lifeSpan) * Object.keys(animationCoords).length,
+          (linearWeight * (growthStatus / lifeSpan) +
+            logWeight * (Math.log(growthStatus + 1) / Math.log(lifeSpan + 1))) *
+            base *
+            Object.keys(animationCoords).length
         ),
-        Object.keys(animationCoords).length - 1,
+        Object.keys(animationCoords).length - 1
       );
       sprite.animation(stage);
     }
@@ -59,7 +67,7 @@ export const Plant = ({
       animations={animationCoords}
       frameRate={10}
       frameIndex={0}
-      scale={{ x: scale, y: scale }}
+      scale={{ x: scale * flip, y: scale }}
       offsetX={256 / 2} // half of frame width
       offsetY={256}
     />
