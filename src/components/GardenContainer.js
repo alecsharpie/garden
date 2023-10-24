@@ -4,9 +4,11 @@ import { Plant } from "./Plant";
 import { speciesData } from "../consts/SpeciesData";
 import { quadtree } from "d3-quadtree";
 import useImage from "use-image";
-// import { Sprite } from "react-konva";
-// import { Image } from "react-konva";
+import { useDrop } from "react-dnd";
 import backgroundImagePng from "../images/background.png";
+import DraggableSprite from "./DraggableSprite";
+
+
 
 const groundHeight = 0.39 * window.innerHeight; // where sky meets ground, height of sky
 
@@ -64,7 +66,7 @@ const GardenContainer = () => {
     })
   );
   const [isPlaying, setIsPlaying] = useState(true);
-  const [shouldRefill, setShouldRefill] = useState(true);
+  const [shouldRefill, setShouldRefill] = useState(false);
   const [timePast, setTimePast] = useState(0);
 
 
@@ -75,6 +77,10 @@ const GardenContainer = () => {
 
   const stageRef = useRef();
 
+    const clearPlants = () => {
+      setPlants([]);
+    };
+
   const downloadScreenshot = () => {
     const dataUrl = stageRef.current.toDataURL();
     const link = document.createElement("a");
@@ -84,6 +90,19 @@ const GardenContainer = () => {
     link.click();
     document.body.removeChild(link);
   };
+
+
+  // Inside GardenContainer component
+  const [, drop] = useDrop({
+    accept: "sprite",
+    drop: (item, monitor) => {
+      const offset = monitor.getClientOffset();
+      const newPlant = generatePlant(item.species);
+      newPlant.x = offset.x;
+      newPlant.y = offset.y;
+      setPlants((prevPlants) => [...prevPlants, newPlant]);
+    },
+  });
 
   useEffect(() => {
     plantsRef.current = plants;
@@ -257,6 +276,19 @@ const GardenContainer = () => {
           <button onClick={downloadScreenshot}>Download Screenshot</button>
         </div>
         <div>
+          <button onClick={clearPlants}>Clear Plants</button>
+        </div>
+        <div>
+          <p>Drag and drop to add plants:</p>
+          {Object.entries(speciesData).map(([species, data]) => (
+            <DraggableSprite
+              key={species}
+              species={species}
+              iconImage={data.icon}
+            />
+          ))}
+        </div>
+        <div>
           {timePast < 365 ? (
             <div>Days: {Math.floor(timePast)}</div>
           ) : (
@@ -267,36 +299,38 @@ const GardenContainer = () => {
           )}
         </div>
       </div>
-      <Stage
-        ref={stageRef}
-        width={window.innerWidth}
-        height={window.innerHeight}
-      >
-        <Layer>
-          <Image
-            x={0}
-            y={0}
-            image={image}
-            width={window.innerWidth}
-            height={window.innerHeight}
-          />
-        </Layer>
-        <Layer>
-          {plants
-            .sort((a, b) => a.y - b.y)
-            .map((plant) => (
-              <Plant
-                key={plant.id}
-                x={plant.x}
-                y={plant.y}
-                img={plant.img}
-                animationCoords={plant.animationCoords}
-                growthStatus={plant.growthStatus}
-                lifeSpan={plant.lifeSpan}
-              />
-            ))}
-        </Layer>
-      </Stage>
+      <div ref={drop}>
+        <Stage
+          ref={stageRef}
+          width={window.innerWidth}
+          height={window.innerHeight}
+        >
+          <Layer>
+            <Image
+              x={0}
+              y={0}
+              image={image}
+              width={window.innerWidth}
+              height={window.innerHeight}
+            />
+          </Layer>
+          <Layer>
+            {plants
+              .sort((a, b) => a.y - b.y)
+              .map((plant) => (
+                <Plant
+                  key={plant.id}
+                  x={plant.x}
+                  y={plant.y}
+                  img={plant.img}
+                  animationCoords={plant.animationCoords}
+                  growthStatus={plant.growthStatus}
+                  lifeSpan={plant.lifeSpan}
+                />
+              ))}
+          </Layer>
+        </Stage>
+      </div>
     </div>
   );
 };

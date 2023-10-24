@@ -6,6 +6,15 @@ import spritePinkFlowerImage from "../images/pink_flower_sprite_3x1_grid.png";
 import spriteTulipFlowerImage from "../images/tulip_flower_sprite_3x1_grid.png";
 import spriteWhiteFlowerImage from "../images/white_flower_sprite_3x1_grid.png";
 
+import iconTreeImage from "../images/icons/tree_icon.png";
+import iconGrassImage from "../images/icons/grass_icon.png";
+import iconLightPinkFlowerImage from "../images/icons/light_pink_flower_icon.png";
+import iconPinkFlowerImage from "../images/icons/pink_flower_icon.png";
+import iconTulipFlowerImage from "../images/icons/tulip_flower_icon.png";
+import iconWhiteFlowerImage from "../images/icons/white_flower_icon.png";
+import iconYellowFlowerImage from "../images/icons/yellow_flower_icon.png";
+
+
 export const speciesData = {
   tree: {
     baseGrowthRate: 0.1,
@@ -15,6 +24,7 @@ export const speciesData = {
     dispersion: 50,
     lifeSpan: 150,
     img: spriteTreeImage,
+    icon: iconTreeImage,
     animationCoords: {
       0: [0, 0, 256, 256],
       1: [256, 0, 256, 256],
@@ -35,6 +45,7 @@ export const speciesData = {
     dispersion: 100,
     lifeSpan: 60,
     img: spriteGrassImage,
+    icon: iconGrassImage,
     animationCoords: {
       0: [0, 0, 256, 256],
       1: [256, 0, 256, 256],
@@ -49,6 +60,7 @@ export const speciesData = {
     dispersion: 15,
     lifeSpan: 100,
     img: spriteYellowFlowerImage,
+    icon: iconYellowFlowerImage,
     animationCoords: {
       0: [0, 0, 256, 256],
       1: [256, 0, 256, 256],
@@ -63,6 +75,7 @@ export const speciesData = {
     dispersion: 5,
     lifeSpan: 100,
     img: spriteWhiteFlowerImage,
+    icon: iconWhiteFlowerImage,
     animationCoords: {
       0: [0, 0, 256, 256],
       1: [256, 0, 256, 256],
@@ -77,6 +90,7 @@ export const speciesData = {
     dispersion: 5,
     lifeSpan: 100,
     img: spriteTulipFlowerImage,
+    icon: iconTulipFlowerImage,
     animationCoords: {
       0: [0, 0, 256, 256],
       1: [256, 0, 256, 256],
@@ -91,6 +105,7 @@ export const speciesData = {
     dispersion: 50,
     lifeSpan: 100,
     img: spritePinkFlowerImage,
+    icon: iconPinkFlowerImage,
     animationCoords: {
       0: [0, 0, 256, 256],
       1: [256, 0, 256, 256],
@@ -105,6 +120,7 @@ export const speciesData = {
     dispersion: 50,
     lifeSpan: 100,
     img: spriteLightPinkFlowerImage,
+    icon: iconLightPinkFlowerImage,
     animationCoords: {
       0: [0, 0, 256, 256],
       1: [256, 0, 256, 256],
